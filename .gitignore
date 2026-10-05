@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+output/
+examples/output/
+# Course datasets are supplied separately; only synthetic fixtures are bundled.
+data/
+netflix_data.csv
+schools.csv
+customer_train.csv
+crimes.csv
+ind_pop_data.csv
+soil_measures.csv
+penguins.csv

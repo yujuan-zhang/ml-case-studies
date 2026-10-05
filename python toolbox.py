@@ -1,39 +1,55 @@
- Define plot_pop()
-def plot_pop(filename, country_code):
+"""Read a population CSV in chunks and export one country's urban population."""
+import argparse
+from pathlib import Path
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from exercise_utils import ROOT
 
-    # Initialize reader object: urb_pop_reader
-    urb_pop_reader = pd.read_csv(filename, chunksize=1000)
 
-    # Initialize empty DataFrame: data
-    data = pd.DataFrame()
-    
-    # Iterate over each DataFrame chunk
-    for df_urb_pop in urb_pop_reader:
-        # Check out specific country: df_pop_ceb
-        df_pop_ceb = df_urb_pop[df_urb_pop['CountryCode'] == country_code]
+def plot_pop(filename, country_code, output_dir):
+    filename = Path(filename)
+    if not filename.is_file():
+        raise ValueError(f'Input not found: {filename}. See the README example command.')
+    required = ['CountryCode', 'Total Population', 'Urban population (% of total)', 'Year']
+    pieces = []
+    for chunk in pd.read_csv(filename, chunksize=1000):
+        missing = sorted(set(required) - set(chunk.columns))
+        if missing:
+            raise ValueError('Missing columns: ' + ', '.join(missing))
+        selected = chunk.loc[chunk['CountryCode'] == country_code, required].copy()
+        if len(selected):
+            for column in required[1:]:
+                selected[column] = pd.to_numeric(selected[column], errors='raise')
+            if selected[required[1:]].isna().any().any():
+                raise ValueError('Selected population rows contain missing numeric values.')
+            selected['Total Urban Population'] = (selected['Total Population'] * selected['Urban population (% of total)'] / 100).astype(int)
+            pieces.append(selected)
+    if not pieces:
+        raise ValueError(f'No rows were found for CountryCode={country_code}.')
+    data = pd.concat(pieces).sort_values('Year')
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    data.to_csv(output / 'urban_population.csv', index=False)
+    ax = data.plot(kind='scatter', x='Year', y='Total Urban Population')
+    ax.figure.savefig(output / 'urban_population.png', bbox_inches='tight')
+    plt.close(ax.figure)
+    print(f'Saved {len(data)} rows and a plot in {output}')
+    return data
 
-        # Zip DataFrame columns of interest: pops
-        pops = zip(df_pop_ceb['Total Population'],
-                    df_pop_ceb['Urban population (% of total)'])
 
-        # Turn zip object into list: pops_list
-        pops_list = list(pops)
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--input', default=ROOT / 'ind_pop_data.csv')
+    parser.add_argument('--country', default='CEB')
+    parser.add_argument('--output-dir', default=ROOT / 'output/population')
+    args = parser.parse_args()
+    try:
+        plot_pop(args.input, args.country, args.output_dir)
+    except (ValueError, OSError) as error:
+        parser.error(str(error))
 
-        # Use list comprehension to create new DataFrame column 'Total Urban Population'
-        df_pop_ceb['Total Urban Population'] = [int(tup[0] * tup[1] * 0.01) for tup in pops_list]
-        
-        # Concatenate DataFrame chunk to the end of data: data
-        data = pd.concat([data, df_pop_ceb])
 
-    # Plot urban population data
-    data.plot(kind='scatter', x='Year', y='Total Urban Population')
-    plt.show()
-
-# Set the filename: fn
-fn = 'ind_pop_data.csv'
-
-# Call plot_pop for country code 'CEB'
-plot_pop('ind_pop_data.csv', 'CEB')
-
-# Call plot_pop for country code 'ARB'
-plot_pop('ind_pop_data.csv', 'ARB')
+if __name__ == '__main__':
+    main()

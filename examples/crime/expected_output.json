@@ -1,0 +1,5 @@
+{
+  "peak_crime_hour": 12,
+  "peak_night_crime_location": "East",
+  "victim_ages": {"0-17": 1, "18-25": 1, "26-34": 1, "35-44": 1, "45-54": 1, "55-64": 0, "65+": 1}
+}

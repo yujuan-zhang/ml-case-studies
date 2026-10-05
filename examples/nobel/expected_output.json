@@ -1,0 +1,9 @@
+{
+  "top_gender": "Male",
+  "top_country": "United States of America",
+  "max_decade_usa": 1950,
+  "max_female_dict": {"1910": "Chemistry"},
+  "first_woman_name": "Example B",
+  "first_woman_category": "Physics",
+  "repeat_list": ["Example B"]
+}

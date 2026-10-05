@@ -1,0 +1,7 @@
+type,release_year,duration,genre
+Movie,1992,80,Action
+Movie,1995,80,Action Adventure
+Movie,1999,100,Drama
+Movie,1994,80,Comedy
+Movie,2000,80,Action
+TV Show,1991,80,Action

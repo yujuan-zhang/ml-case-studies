@@ -1,0 +1,8 @@
+year,sex,birth_country,category,full_name
+1901,Male,Sweden,Physics,Example A
+1903,Female,France,Physics,Example B
+1911,Female,France,Chemistry,Example B
+1950,Male,United States of America,Chemistry,Example C
+1951,Male,United States of America,Physics,Example D
+1952,Female,United States of America,Medicine,Example E
+1960,Male,United Kingdom,Physics,Example F
