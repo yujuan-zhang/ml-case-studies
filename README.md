@@ -1,8 +1,8 @@
-# Data analysis learning exercises
+# ML case studies
 
 ## What it does
 
-This private repository contains personal Python learning exercises. Start with the five standalone examples below: they read tabular data, answer a concrete question, and save a result that can be checked. Other files remain historical notes or unfinished exercises; their status is listed explicitly.
+This repository collects personal Python exercises in data analysis and machine learning. Start with the five standalone examples below: they read tabular data, answer a concrete question, and save a result that can be checked. Other files remain historical notes or unfinished exercises; their status is listed explicitly.
 
 ## Input
 
@@ -36,6 +36,13 @@ JSON summaries, CSV tables and plots in `examples/output/`. Reference files let 
 ## Try it
 
 ### First working example
+
+Clone the repository, then use Python 3.11 in a separate environment:
+
+```bash
+git clone https://github.com/yujuan-zhang/ml-case-studies.git
+cd ml-case-studies
+```
 
 Use Python 3.11 in a separate environment, from the repository root:
 
